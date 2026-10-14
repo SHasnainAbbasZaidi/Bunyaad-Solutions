@@ -1,0 +1,16 @@
+import Link from "next/link";
+import prisma from "@/lib/db";
+import { AdminShell } from "@/components/admin/AdminShell";
+import { publishedArticles } from "@/lib/public-content";
+import { modules } from "@/lib/cms-config";
+import { requireAuth } from "@/lib/auth-utils";
+export default async function Dashboard(){
+ const user=await requireAuth();
+ const [projects,live,development,team,published,drafts,inquiries,logs,recentProjects,recentNews]=await Promise.all([
+ prisma.project.count(),prisma.project.count({where:{status:"LIVE"}}),prisma.project.count({where:{status:{in:["IN_DEVELOPMENT","TESTING"]}}}),prisma.teamMember.count(),prisma.article.count({where:publishedArticles()}),prisma.article.count({where:{status:"DRAFT"}}),prisma.contactInquiry.count({where:{status:"NEW",archived:false}}),
+ prisma.activityLog.findMany({take:8,orderBy:{createdAt:"desc"},include:{user:{select:{name:true}}}}),prisma.project.findMany({take:4,orderBy:{updatedAt:"desc"}}),prisma.article.findMany({take:4,orderBy:{updatedAt:"desc"}})]);
+ const metrics=[["Total projects",projects],["Live projects",live],["In development / testing",development],["Team members",team],["Published articles",published],["Draft articles",drafts],["New inquiries",inquiries]];
+ return <AdminShell><p className="eyebrow">Bunyaad Solutions</p><h1>Website overview</h1><p>Manage your company’s content and incoming business inquiries.</p><div className="grid grid-cols-2 xl:grid-cols-4 gap-4 my-8">{metrics.map(([title,count])=><div className="panel" key={title}><p>{title}</p><strong className="text-4xl">{count}</strong></div>)}</div>
+ <div className="grid md:grid-cols-2 gap-6"><section className="panel"><h2>Project status</h2>{[["Live",live],["Development & testing",development],["Other stages",projects-live-development]].map(([label,count])=><div className="my-3" key={label}><div className="flex justify-between"><span>{label}</span><span>{count}</span></div><meter aria-label={String(label)} value={Number(count)} max={Math.max(projects,1)} className="w-full"/></div>)}</section><section className="panel"><h2>Manage content</h2><div className="grid grid-cols-2 gap-3 mt-4">{Object.entries(modules).filter(([,m])=>!m.superOnly||user.role==="SUPER_ADMIN").map(([key,m])=><Link className="admin-link" key={key} href={"/admin/"+key}>{m.label} →</Link>)}</div></section></div>
+ <div className="grid lg:grid-cols-2 gap-6 mt-6"><section className="panel"><h2>Recently updated content</h2>{[...recentProjects.map(p=>({id:p.id,title:p.name,date:p.updatedAt,url:"/admin/projects"})),...recentNews.map(p=>({id:p.id,title:p.title,date:p.updatedAt,url:"/admin/news"}))].sort((a,b)=>b.date.getTime()-a.date.getTime()).slice(0,6).map(item=><p className="py-3 border-b" key={item.id}><Link href={item.url}>{item.title}</Link><small className="block">{item.date.toLocaleDateString()}</small></p>)}</section><section className="panel"><h2>Recent activity</h2>{logs.map(log=><p className="py-3 border-b" key={log.id}>{log.user.name} · {log.action.toLowerCase()} · {log.entityType}<small className="block">{log.createdAt.toISOString()}</small></p>)}<Link href="/admin/activity">View all activity →</Link></section></div></AdminShell>;
+}
