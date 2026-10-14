@@ -1,3 +1,4 @@
+import { defaultHighlights } from "@/lib/branding";
 import prisma from "@/lib/db";
 import { getSettings, publishedArticles } from "@/lib/public-content";
 import { cleanHtml } from "@/lib/security";
@@ -59,6 +60,11 @@ export default async function HomePage() {
     sections = JSON.parse(settings.homepage_sections || "{}");
   } catch {}
   const show = (key: string) => sections[key] !== false;
+  let highlights = defaultHighlights;
+  try {
+    const parsed = JSON.parse(settings.hero_highlights || "null");
+    if (Array.isArray(parsed)) highlights = parsed;
+  } catch {}
   const approach = aboutSections.find((s) => s.sectionKey === "approach");
   return (
     <div className="min-h-screen flex flex-col">
@@ -68,10 +74,10 @@ export default async function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "Bunyaad Solutions",
+            name: settings.site_name || "Bunyaad Solutions",
             url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
             logo: new URL(
-              "/brand/logo-light.png",
+              settings.logo_light || "/brand/logo-light.png",
               process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
             ).href,
           }).replace(/</g, "\\u003c"),
@@ -79,7 +85,9 @@ export default async function HomePage() {
       />
       <Header />
       <main id="main-content" className="flex-1">
-        {show("hero") && hero && <HeroSection hero={hero} />}
+        {show("hero") && hero && (
+          <HeroSection hero={hero} highlights={highlights} />
+        )}
         {show("about") && (
           <AboutSection
             aboutSections={aboutSections.filter((s) =>

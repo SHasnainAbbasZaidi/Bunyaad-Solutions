@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { cleanHtml } from "@/lib/security";

@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { revalidatePath } from "next/cache";
 import { requireApiUser } from "@/lib/auth-utils";
 import { modules } from "@/lib/cms-config";
 import { delegate, loadRow, version, saveContent } from "@/lib/cms";
@@ -39,14 +40,14 @@ export async function PUT(request: Request, context: Context) {
     const { resource, id } = await context.params;
     const user = await requireApiUser(modules[resource]?.superOnly);
     const body = await readJson(request);
-    return Response.json(
-      await saveContent(resource, body.data, {
-        id,
-        version: body.version,
-        draft: body.draft === true,
-        user,
-      }),
-    );
+    const row = await saveContent(resource, body.data, {
+      id,
+      version: body.version,
+      draft: body.draft === true,
+      user,
+    });
+    if (!body.draft) revalidatePath("/", "layout");
+    return Response.json(row);
   } catch (error) {
     return apiError(error);
   }
@@ -88,6 +89,7 @@ export async function DELETE(request: Request, context: Context) {
         },
       });
     });
+    revalidatePath("/", "layout");
     return Response.json({ success: true });
   } catch (error) {
     return apiError(error);

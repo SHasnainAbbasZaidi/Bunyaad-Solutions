@@ -39,7 +39,7 @@ export default async function ProjectPage({
     <PageFrame>
       <article className="max-w-5xl mx-auto px-6 py-12">
         <p className="text-blue-600 dark:text-blue-400">
-          {p.businessModel} · {p.industry} · {p.status.replaceAll("_", " ")}
+          {p.industry} · {p.status.replaceAll("_", " ")}
         </p>
         {p.logo && (
           <img src={p.logo} alt={p.name + " logo"} className="max-h-24 mt-8" />

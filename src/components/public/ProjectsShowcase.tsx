@@ -3,7 +3,7 @@
 import * as React from "react";
 import { projectStatuses } from "@/lib/cms-config";
 import { useSiteSettings, sectionCopy } from "./SiteContext";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { ExternalLink } from "lucide-react";
 
 interface ProjectItem {
@@ -12,7 +12,6 @@ interface ProjectItem {
   slug: string;
   description: string;
   industry?: string | null;
-  businessModel: string;
   status: string;
   coverImage?: string | null;
   logo?: string | null;
@@ -56,7 +55,6 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
   const [query, setQuery] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [category, setCategory] = React.useState("");
-  const [filter, setFilter] = React.useState<string>("ALL");
 
   const filteredProjects = projects.filter((project) => {
     if (
@@ -65,8 +63,7 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
       (category && project.industry !== category)
     )
       return false;
-    if (filter === "ALL") return true;
-    return project.businessModel.toUpperCase() === filter;
+    return true;
   });
 
   return (
@@ -76,7 +73,7 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-              Portfolio & Ventures
+              {sectionCopy(settings, "projects_eyebrow", "Our work")}
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
               {sectionCopy(settings, "projects_title", "Our Digital Platforms")}
@@ -88,23 +85,6 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
                 "Explore our planned and active digital platform initiatives.",
               )}
             </p>
-          </div>
-
-          {/* Model Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {["ALL", "B2B", "B2C", "D2C", "HYBRID"].map((m) => (
-              <button
-                key={m}
-                onClick={() => setFilter(m)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  filter === m
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {m === "ALL" ? "All Platforms" : `${m} Platforms`}
-              </button>
-            ))}
           </div>
         </div>
 
@@ -142,7 +122,15 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
           </label>
         </div>
         {!filteredProjects.length && (
-          <p className="py-10">No published projects match these filters.</p>
+          <p className="py-10">
+            {projects.length
+              ? "No projects match these filters."
+              : sectionCopy(
+                  settings,
+                  "projects_empty",
+                  "Updates will be shared here as our work progresses.",
+                )}
+          </p>
         )}
         {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -190,7 +178,7 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
                       Featured platform
                     </p>
                   )}
-                  {/* Top Bar: Status & Business Model */}
+                  {/* Top Bar: Project status */}
                   <div className="flex items-center justify-between gap-2 mb-5">
                     <span
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusInfo.bg} ${statusInfo.text}`}
@@ -199,10 +187,6 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
                         className={`w-2 h-2 rounded-full ${statusInfo.dot} animate-pulse`}
                       />
                       {statusInfo.label}
-                    </span>
-
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/50 dark:border-zinc-700/50 uppercase">
-                      {project.businessModel}
                     </span>
                   </div>
 
@@ -239,7 +223,7 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
                 {/* Footer link */}
                 <div className="pt-6 mt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
                   <span className="text-xs text-zinc-400">
-                    Architecture & Operations
+                    Digital creation
                   </span>
                   <Link
                     href={"/projects/" + project.slug}

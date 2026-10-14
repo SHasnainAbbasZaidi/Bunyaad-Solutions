@@ -5,7 +5,8 @@ import { Footer } from "@/components/public/Footer";
 
 export const metadata = {
   title: "Services",
-  description: "B2B, B2C, D2C, SaaS and enterprise software solutions.",
+  description:
+    "Digital platform creation, product design, software development, and innovation.",
   alternates: { canonical: "/solutions" },
 };
 

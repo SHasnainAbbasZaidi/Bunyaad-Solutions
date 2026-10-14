@@ -1,13 +1,19 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import Image from "next/image";
 import { useSiteSettings } from "./SiteContext";
 import { ThemeToggle } from "./ThemeToggle";
+import { navigationLinks } from "@/lib/branding";
+import { usePathname } from "next/navigation";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export function Header() {
+  const pathname = usePathname();
+  return <HeaderContent key={pathname} />;
+}
+function HeaderContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
 
@@ -20,19 +26,7 @@ export function Header() {
   }, []);
 
   const settings = useSiteSettings();
-  const defaultLinks = [
-    { name: "Solutions", href: "/solutions" },
-    { name: "Platforms", href: "/projects" },
-    { name: "About", href: "/about" },
-    { name: "Leadership", href: "/team" },
-    { name: "News", href: "/news" },
-    { name: "Contact", href: "/contact" },
-  ];
-
-  let navLinks = defaultLinks;
-  try {
-    if (settings.navigation) navLinks = JSON.parse(settings.navigation);
-  } catch {}
+  const navLinks = navigationLinks(settings.navigation);
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -48,8 +42,8 @@ export function Header() {
             {/* Dark mode logo */}
             <div className="hidden dark:block relative h-10 w-44">
               <Image
-                src="/brand/logo-dark.png"
-                alt="Bunyaad Solutions Logo"
+                src={settings.logo_dark || "/brand/logo-dark.png"}
+                alt={(settings.site_name || "Bunyaad Solutions") + " logo"}
                 fill
                 sizes="176px"
                 className="object-contain object-left group-hover:opacity-90 transition-opacity"
@@ -59,8 +53,8 @@ export function Header() {
             {/* Light mode logo */}
             <div className="block dark:hidden relative h-10 w-44">
               <Image
-                src="/brand/logo-light.png"
-                alt="Bunyaad Solutions Logo"
+                src={settings.logo_light || "/brand/logo-light.png"}
+                alt={(settings.site_name || "Bunyaad Solutions") + " logo"}
                 fill
                 sizes="176px"
                 className="object-contain object-left group-hover:opacity-90 transition-opacity"
@@ -87,10 +81,10 @@ export function Header() {
             <ThemeToggle />
 
             <Link
-              href="/contact"
+              href={settings.header_cta_url || "/contact"}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-blue-500/20 hover:shadow-md transition-all duration-200 active:scale-95"
             >
-              <span>Partner With Us</span>
+              <span>{settings.header_cta_text || "Let’s Talk"}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -122,7 +116,6 @@ export function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
                 className="text-base font-medium text-zinc-700 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 py-1"
               >
                 {link.name}
@@ -131,11 +124,10 @@ export function Header() {
           </nav>
           <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-3">
             <Link
-              href="/contact"
-              onClick={() => setMobileMenuOpen(false)}
+              href={settings.header_cta_url || "/contact"}
               className="inline-flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
             >
-              Partner With Us
+              {settings.header_cta_text || "Let’s Talk"}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

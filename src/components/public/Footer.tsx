@@ -1,5 +1,6 @@
+import { navigationLinks } from "@/lib/branding";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { getSettings } from "@/lib/public-content";
 export async function Footer() {
   const settings = await getSettings();
@@ -9,36 +10,36 @@ export async function Footer() {
         <div>
           <Link href="/">
             <Image
-              className="dark:hidden"
-              src="/brand/logo-light.png"
-              alt="بنیاد SOLUTIONS"
+              className="dark:hidden h-auto"
+              style={{ height: "auto" }}
+              src={settings.logo_light || "/brand/logo-light.png"}
+              alt={settings.site_name || "Bunyaad Solutions"}
               width={176}
               height={60}
             />
             <Image
-              className="hidden dark:block"
-              src="/brand/logo-dark.png"
-              alt="بنیاد SOLUTIONS"
+              className="hidden dark:block h-auto"
+              style={{ height: "auto" }}
+              src={settings.logo_dark || "/brand/logo-dark.png"}
+              alt={settings.site_name || "Bunyaad Solutions"}
               width={176}
               height={60}
             />
           </Link>
+          {settings.site_tagline && (
+            <p className="mt-4 font-semibold">{settings.site_tagline}</p>
+          )}
           <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
             {settings.footer_content ||
               "Building the Foundation of Digital Innovation."}
           </p>
         </div>
         <nav aria-label="Footer" className="grid grid-cols-2 gap-3 text-sm">
-          {[
-            ["About us", "about"],
-            ["Services", "solutions"],
-            ["Platforms", "projects"],
-            ["Team", "team"],
-            ["News", "news"],
-            ["Contact", "contact"],
-          ].map(([label, url]) => (
-            <Link key={url} href={"/" + url}>
-              {label}
+          {navigationLinks(
+            settings.footer_navigation ?? settings.navigation,
+          ).map(({ name, href }) => (
+            <Link key={name} href={href}>
+              {name}
             </Link>
           ))}
         </nav>
@@ -70,7 +71,8 @@ export async function Footer() {
             ))}
         </div>
         <p className="text-xs text-zinc-500 md:col-span-3">
-          © {new Date().getFullYear()} Bunyaad Solutions. All rights reserved.
+          © {new Date().getFullYear()}{" "}
+          {settings.site_name || "Bunyaad Solutions"}. All rights reserved.
         </p>
       </div>
     </footer>

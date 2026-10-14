@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import prisma from "@/lib/db";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { publishedArticles } from "@/lib/public-content";

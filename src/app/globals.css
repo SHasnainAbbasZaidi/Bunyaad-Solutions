@@ -713,3 +713,47 @@ section[id] {
     scroll-behavior: auto !important;
   }
 }
+/* Click feedback stays usable without blocking the page or keyboard focus. */
+.navigation-notice {
+  position: fixed;
+  z-index: 10000;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: calc(100vw - 2rem);
+  width: max-content;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid #3b82f6;
+  border-radius: 1rem;
+  background: #0f172a;
+  color: #fff;
+  box-shadow: 0 8px 30px #0003;
+  font-size: 0.875rem;
+}
+.navigation-notice a {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+.navigation-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #ffffff50;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: navigation-spin 0.8s linear infinite;
+}
+@keyframes navigation-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation-spinner {
+    animation: none;
+  }
+}

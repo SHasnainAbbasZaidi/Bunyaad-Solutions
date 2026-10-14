@@ -1,4 +1,6 @@
 "use client";
+import { clientRequest } from "@/lib/client-request";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { modules, initialValues, projectStatuses } from "@/lib/cms-config";
 import { SettingsValue } from "./SettingsValue";
@@ -44,6 +46,7 @@ export function ContentManager({
   superAdmin: boolean;
 }) {
   const config = modules[resource];
+  const router = useRouter();
   const [rows, setRows] = useState<RecordData[]>([]),
     [q, setQ] = useState(""),
     [status, setStatus] = useState(""),
@@ -55,40 +58,53 @@ export function ContentManager({
     [editorKey, setEditorKey] = useState(0);
   const [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
+    [loading, setLoading] = useState(true),
     [mediaField, setMediaField] = useState<string | null>(null),
     [preview, setPreview] = useState(false),
     [resetUrl, setResetUrl] = useState("");
-  const load = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "/api/admin/" +
-          resource +
-          "?q=" +
-          encodeURIComponent(q) +
-          "&page=" +
-          page +
-          "&status=" +
-          encodeURIComponent(status),
-      );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error);
-      setRows(data.rows);
-      setTotal(data.total);
-    } catch (error) {
-      setMessage(
-        error instanceof Error ? error.message : "Unable to load content.",
-      );
-    }
-  }, [resource, q, page, status]);
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      setLoading(true);
+      try {
+        const response = await clientRequest(
+          "/api/admin/" +
+            resource +
+            "?q=" +
+            encodeURIComponent(q) +
+            "&page=" +
+            page +
+            "&status=" +
+            encodeURIComponent(status),
+          { signal },
+        );
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        setRows(data.rows);
+        setTotal(data.total);
+      } catch (error) {
+        if (signal?.aborted) return;
+        setMessage(
+          error instanceof Error ? error.message : "Unable to load content.",
+        );
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
+    },
+    [resource, q, page, status],
+  );
   // Fetch updates state only after the network response resolves.
   useEffect(() => {
+    const controller = new AbortController();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    void load();
+    void load(controller.signal);
+    return () => controller.abort();
   }, [load]);
   async function edit(row: RecordData) {
     setBusy(true);
     try {
-      const response = await fetch("/api/admin/" + resource + "/" + row.id);
+      const response = await clientRequest(
+        "/api/admin/" + resource + "/" + row.id,
+      );
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setRecord(data);
@@ -119,7 +135,7 @@ export function ContentManager({
         if (field.type === "date" && input[field.key])
           input[field.key] = new Date(String(input[field.key])).toISOString();
       }
-      const response = await fetch(
+      const response = await clientRequest(
         "/api/admin/" + resource + (record.id ? "/" + record.id : ""),
         {
           method: record.id ? "PUT" : "POST",
@@ -135,6 +151,7 @@ export function ContentManager({
       if (!response.ok) throw new Error(data.error);
       await load();
       await edit(data);
+      if (!draft) router.refresh();
       setMessage(
         draft
           ? "Draft saved. Public content is unchanged."
@@ -155,6 +172,7 @@ export function ContentManager({
         </div>
         {resource !== "inquiries" && (
           <button
+            disabled={busy}
             onClick={() => {
               setRecord({});
               setValues(initialValues(resource));
@@ -201,10 +219,12 @@ export function ContentManager({
             </select>
           </label>
         )}
-        <span className="self-end">{total} records</span>
+        <span className="self-end">
+          {loading ? "Loading content…" : `${total} records`}
+        </span>
       </div>
       <p role="status" className="feedback">
-        {message}
+        {message || (busy ? "Working…" : loading ? "Loading content…" : "")}
       </p>
       {record && (
         <div className="panel editor-panel">
@@ -400,7 +420,7 @@ export function ContentManager({
                       return;
                     setBusy(true);
                     try {
-                      const response = await fetch(
+                      const response = await clientRequest(
                         "/api/admin/" + resource + "/" + record.id,
                         {
                           method: "DELETE",
@@ -432,7 +452,7 @@ export function ContentManager({
                   type="button"
                   onClick={async () => {
                     try {
-                      const response = await fetch(
+                      const response = await clientRequest(
                         "/api/admin/users/" + record.id + "/reset",
                         { method: "POST" },
                       );
@@ -552,7 +572,7 @@ export function ContentManager({
           />
         </div>
       )}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" aria-busy={loading}>
         <table>
           <thead>
             <tr>
@@ -604,13 +624,21 @@ export function ContentManager({
           </tbody>
         </table>
       </div>
-      {!rows.length && <div className="panel">No entries found.</div>}
+      {!loading && !rows.length && (
+        <div className="panel">No entries found.</div>
+      )}
       <div className="flex gap-4 my-5">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+        <button
+          disabled={loading || page === 1}
+          onClick={() => setPage(page - 1)}
+        >
           Previous
         </button>
         <span>Page {page}</span>
-        <button disabled={page * 20 >= total} onClick={() => setPage(page + 1)}>
+        <button
+          disabled={loading || page * 20 >= total}
+          onClick={() => setPage(page + 1)}
+        >
           Next
         </button>
       </div>

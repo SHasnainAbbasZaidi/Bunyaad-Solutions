@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import prisma from "@/lib/db";
 import { publishedArticles } from "@/lib/public-content";
 import { categories } from "@/lib/cms-config";

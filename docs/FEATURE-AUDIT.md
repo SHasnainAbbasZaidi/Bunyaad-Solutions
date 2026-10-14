@@ -10,7 +10,7 @@ The initial audit inspected all existing source routes, shared components, datab
 | Public homepage | Database-backed sections with hardcoded labels and some misleading content | Editable hero, sections, section copy, visibility, ordering, and featured content |
 | About | Overview/mission/vision only displayed | Structured sections and rich content, images, revisions, approach |
 | Services | Published listing; broken inquiry fragment links | CMS CRUD, details, images, icons, features, related projects, order and visibility |
-| Projects | Published listing and business-model filters | CMS CRUD, detail routes, category/status/search filters, gallery, publication and featured flags |
+| Projects | Published listing with legacy business-model filters | CMS CRUD, detail routes, category/status/search filters, gallery, publication and featured flags; public business-model labels removed |
 | Team | Seeded names/biographies; no manager or photographs | CMS CRUD, photos, skills, departments, links, leadership flags, visibility and ordering |
 | News | Seeded published list; nonfunctional Read Article label | Rich editor, detail routes, search/category/pagination, author, tags, SEO, scheduling, revisions |
 | Contact | Database submission, mismatched inquiry categories, no active spam/rate control | Shared categories, validation, honeypot, persistent rate limiting, private inbox |

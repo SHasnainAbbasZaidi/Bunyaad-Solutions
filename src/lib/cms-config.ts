@@ -66,6 +66,14 @@ export const settingKeys = [
   "navigation",
   "homepage_sections",
   "section_copy",
+  "hero_highlights",
+  "footer_navigation",
+  "header_cta_text",
+  "header_cta_url",
+  "logo_light",
+  "logo_dark",
+  "icon_light",
+  "icon_dark",
 ];
 export const modules: Record<
   string,
@@ -151,12 +159,6 @@ export const modules: Record<
       f("description", "Summary", "textarea", true),
       f("fullContent", "Detailed description", "rich"),
       f("industry", "Category"),
-      f("businessModel", "Business model", "select", true, [
-        "B2B",
-        "B2C",
-        "D2C",
-        "HYBRID",
-      ]),
       f("status", "Development status", "select", true, projectStatuses),
       f("externalUrl", "Project website", "url"),
       f("launchDate", "Launch date", "date"),
@@ -237,6 +239,7 @@ export const modules: Record<
       f("key", "Setting", "select", true, settingKeys),
       f("value", "Value", "textarea"),
       f("group", "Group", "select", true, [
+        "branding",
         "general",
         "contact",
         "social",

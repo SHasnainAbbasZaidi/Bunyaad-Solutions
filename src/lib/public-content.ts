@@ -1,3 +1,4 @@
+import { cache } from "react";
 import prisma from "./db";
 import type { Prisma } from "@prisma/client";
 export function publishedArticles(): Prisma.ArticleWhereInput {
@@ -14,10 +15,10 @@ export function publishedArticles(): Prisma.ArticleWhereInput {
 }
 // Time-gated reads publish even when the site has no traffic at the scheduled instant.
 // No process timer, external cron, or stale static cache is required.
-export async function getSettings() {
+export const getSettings = cache(async function getSettings() {
   const rows = await prisma.siteSettings.findMany();
   return Object.fromEntries(rows.map((r) => [r.key, r.value]));
-}
+});
 export function jsonList(value?: string | null): string[] {
   try {
     const list = JSON.parse(value || "[]");

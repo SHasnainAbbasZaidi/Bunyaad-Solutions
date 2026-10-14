@@ -1,5 +1,6 @@
 import { requireApiUser } from "@/lib/auth-utils";
-import { modules } from "@/lib/cms-config";
+import { modules, settingKeys } from "@/lib/cms-config";
+import { revalidatePath } from "next/cache";
 import { delegate, publicRow, version, saveContent } from "@/lib/cms";
 import {
   apiError,
@@ -32,6 +33,7 @@ export async function GET(request: Request, context: Context) {
       ? { OR: searchKeys[resource].map((key) => ({ [key]: { contains: q } })) }
       : {};
     const status = query.get("status");
+    if (resource === "settings") where.key = { in: settingKeys };
     if (status && ["projects", "news", "inquiries"].includes(resource))
       where.status = status;
     const sort =
@@ -70,6 +72,7 @@ export async function POST(request: Request, context: Context) {
       user,
       draft: body.draft === true,
     });
+    revalidatePath("/", "layout");
     return Response.json(row, { status: 201 });
   } catch (error) {
     return apiError(error);

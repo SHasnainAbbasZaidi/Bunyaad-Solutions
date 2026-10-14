@@ -633,6 +633,97 @@ test("content, sessions and rate limits survive a server restart", async () => {
     429,
   );
 });
+test("brand settings control public identity, navigation, highlights and section copy", async () => {
+  const settings: Record<string, string> = {
+    site_name: "Studio Verification",
+    site_tagline: "Ideas made useful",
+    header_cta_text: "Collaborate with us",
+    header_cta_url: "/contact",
+    footer_navigation: JSON.stringify([
+      { name: "Our process", href: "/about" },
+    ]),
+    hero_highlights: JSON.stringify([
+      {
+        title: "Explore together",
+        description: "A verified editable highlight",
+      },
+    ]),
+    section_copy: JSON.stringify({
+      services_title: "Our creative capabilities",
+      services_description: "Editable capability introduction",
+      projects_empty: "New work is being shaped",
+    }),
+    logo_light: imageUrl,
+    icon_light: imageUrl,
+  };
+  for (const [key, value] of Object.entries(settings)) {
+    const existing = await prisma.siteSettings.findUnique({ where: { key } });
+    if (existing) {
+      const current = await (
+        await request("/api/admin/settings/" + existing.id, { jar: adminJar })
+      ).json();
+      const result = await request("/api/admin/settings/" + existing.id, {
+        method: "PUT",
+        jar: adminJar,
+        body: {
+          data: { key, value, group: "branding" },
+          version: current._version,
+        },
+      });
+      assert.equal(result.status, 200, await result.text());
+    } else await create("settings", { key, value, group: "branding" });
+  }
+  const home = await (await request("/")).text();
+  for (const text of [
+    "Studio Verification",
+    "Ideas made useful",
+    "Collaborate with us",
+    "Our process",
+    "Explore together",
+    "A verified editable highlight",
+    "Our creative capabilities",
+  ])
+    assert(home.includes(text), text);
+  const solutions = await (await request("/solutions")).text();
+  assert(solutions.includes("Editable capability introduction"));
+  const project = await create("projects", {
+    name: "Creative experiment",
+    description: "An original idea",
+    status: "CONCEPT",
+    published: true,
+  });
+  assert.equal(project.businessModel, "UNSPECIFIED");
+  const detail = await (await request("/projects/creative-experiment")).text();
+  assert(
+    !detail.includes("UNSPECIFIED"),
+    "Internal legacy category must not appear in public output",
+  );
+});
+test("invalid branding updates are rejected and legacy service links redirect", async () => {
+  for (const [key, value] of [
+    ["hero_highlights", '[{"title":"","description":"bad"}]'],
+    ["header_cta_url", "javascript:alert(1)"],
+    ["logo_dark", "https://external.test/logo.png"],
+    ["footer_navigation", '[{"name":"Bad","href":"javascript:alert(1)"}]'],
+  ]) {
+    const response = await request("/api/admin/settings", {
+      method: "POST",
+      jar: adminJar,
+      body: { data: { key, value, group: "branding" } },
+    });
+    assert.equal(response.status, 400, key);
+  }
+  const oldLink = await request("/solutions/b2b-platforms");
+  assert.equal(oldLink.status, 308);
+  assert(
+    oldLink.headers
+      .get("location")
+      ?.endsWith("/solutions/digital-platform-creation"),
+  );
+  const home = await (await request("/")).text();
+  assert(!/B2B|B2C|Scalable Cloud/.test(home));
+  assert(!home.includes('href="/admin'));
+});
 test("logout clears authentication and administrative actions are audited", async () => {
   const csrf = await (
     await request("/api/auth/csrf", { jar: adminJar })

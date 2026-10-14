@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {

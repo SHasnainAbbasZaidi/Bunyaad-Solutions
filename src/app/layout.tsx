@@ -14,24 +14,27 @@ export async function generateMetadata(): Promise<Metadata> {
     title: {
       default:
         settings.seo_title ||
-        "Bunyaad Solutions — Digital Platforms & Technology",
-      template: "%s | Bunyaad Solutions",
+        "Bunyaad Solutions — Digital Platforms & Innovation",
+      template: "%s | " + (settings.site_name || "Bunyaad Solutions"),
     },
     description:
       settings.seo_description ||
       "Building the Foundation of Digital Innovation.",
     openGraph: {
-      siteName: "Bunyaad Solutions",
+      siteName: settings.site_name || "Bunyaad Solutions",
       type: "website",
-      images: ["/brand/logo-light.png"],
+      images: [settings.logo_light || "/brand/logo-light.png"],
     },
     icons: {
       icon: [
         {
-          url: "/brand/icon-light.png",
+          url: settings.icon_light || "/brand/icon-light.png",
           media: "(prefers-color-scheme: light)",
         },
-        { url: "/brand/icon-dark.png", media: "(prefers-color-scheme: dark)" },
+        {
+          url: settings.icon_dark || "/brand/icon-dark.png",
+          media: "(prefers-color-scheme: dark)",
+        },
       ],
     },
   };
@@ -46,7 +49,12 @@ export default async function RootLayout({
     Object.entries(settings).filter(([key]) => settingKeys.includes(key)),
   );
   return (
-    <html lang="en" suppressHydrationWarning className="h-full antialiased">
+    <html
+      data-scroll-behavior="smooth"
+      lang="en"
+      suppressHydrationWarning
+      className="h-full antialiased"
+    >
       <body className="min-h-full flex flex-col font-sans">
         <a className="skip-link" href="#main-content">
           Skip to content

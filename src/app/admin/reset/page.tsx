@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 export default function ResetPage() {
   const [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import Image from "next/image";
 import { signOut } from "@/lib/auth";
 import prisma from "@/lib/db";

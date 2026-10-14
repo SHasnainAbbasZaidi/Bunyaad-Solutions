@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { cleanHtml } from "@/lib/security";
 import { getSettings } from "@/lib/public-content";
 export async function AboutSection({
@@ -24,7 +24,7 @@ export async function AboutSection({
     >
       <div className="max-w-7xl mx-auto px-6">
         <p className="text-blue-600 dark:text-blue-400 mb-3">
-          Bunyaad Solutions
+          {settings.site_name || "Bunyaad Solutions"}
         </p>
         <h2 className="text-4xl mb-10">{title}</h2>
         <div className="grid md:grid-cols-2 gap-8">

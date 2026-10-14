@@ -129,8 +129,18 @@ export function validateContent(resource: string, input: unknown) {
     if (!settingKeys.includes(String(data.key)))
       throw new HttpError(400, "Unknown setting.");
     const value = String(data.value);
-    if (String(data.key).endsWith("_url") && !safeUrl(value, false))
+    if (
+      String(data.key).endsWith("_url") &&
+      !safeUrl(value, data.key === "header_cta_url")
+    )
       throw new HttpError(400, "Invalid social URL.");
+    if (
+      ["logo_light", "logo_dark", "icon_light", "icon_dark"].includes(
+        String(data.key),
+      ) &&
+      (!/^\/(?:brand|uploads)\/[^?#]+$/.test(value) || !safeUrl(value))
+    )
+      throw new HttpError(400, "Choose a brand image from the media library.");
     if (
       data.key === "contact_email" &&
       value &&
@@ -143,9 +153,13 @@ export function validateContent(resource: string, input: unknown) {
     )
       throw new HttpError(400, "Choose light, dark or system.");
     if (
-      ["navigation", "homepage_sections", "section_copy"].includes(
-        String(data.key),
-      )
+      [
+        "navigation",
+        "footer_navigation",
+        "hero_highlights",
+        "homepage_sections",
+        "section_copy",
+      ].includes(String(data.key))
     ) {
       let object: unknown;
       try {
@@ -154,7 +168,7 @@ export function validateContent(resource: string, input: unknown) {
         throw new HttpError(400, "This setting requires valid JSON.");
       }
       if (
-        data.key === "navigation" &&
+        ["navigation", "footer_navigation"].includes(String(data.key)) &&
         (!Array.isArray(object) ||
           object.length > 10 ||
           object.some(
@@ -170,6 +184,24 @@ export function validateContent(resource: string, input: unknown) {
         throw new HttpError(
           400,
           "Navigation requires up to 10 {name, href} entries.",
+        );
+      if (
+        data.key === "hero_highlights" &&
+        (!Array.isArray(object) ||
+          object.length > 4 ||
+          object.some(
+            (v) =>
+              !v ||
+              typeof v.title !== "string" ||
+              !v.title.trim() ||
+              v.title.length > 80 ||
+              typeof v.description !== "string" ||
+              v.description.length > 300,
+          ))
+      )
+        throw new HttpError(
+          400,
+          "Use up to four highlight cards with a title and description.",
         );
       if (
         data.key === "homepage_sections" &&

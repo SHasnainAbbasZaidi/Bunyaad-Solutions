@@ -70,6 +70,7 @@ export default async function ModulePage({
   return (
     <AdminShell>
       <ContentManager
+        key={resource}
         resource={resource}
         superAdmin={user.role === "SUPER_ADMIN"}
       />

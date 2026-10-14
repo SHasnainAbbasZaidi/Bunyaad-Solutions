@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 export default function NotFound() {
   return (
     <main className="p-12 pt-32 text-center">

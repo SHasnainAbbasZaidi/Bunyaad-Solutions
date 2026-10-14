@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { useSiteSettings, sectionCopy } from "./SiteContext";
 import { Calendar, ArrowRight } from "lucide-react";
 
@@ -27,7 +27,7 @@ export function NewsSection({ articles }: { articles: ArticleItem[] }) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-              Insights & Dispatches
+              {sectionCopy(settings, "news_eyebrow", "Ideas & updates")}
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
               {sectionCopy(

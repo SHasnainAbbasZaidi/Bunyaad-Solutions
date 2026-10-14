@@ -67,12 +67,16 @@ Super Admins can also create accounts in **Administrators**, enable the account,
 - **Hero**: headline, description, buttons, image, alignment, and publication.
 - **About & approach**: structured sections, including overview, mission, vision, story, values, expertise, philosophy, objectives, and approach.
 - **Services**: descriptions, icons, images, features, related projects, order, and visibility.
-- **Projects**: business model, category, development status, images/gallery, URL, launch date, featured flag, order, and publication.
+- **Projects**: category, development status, images/gallery, URL, launch date, featured flag, order, and publication. Projects are presented as creative work without B2B/B2C labels.
 - **Team**: photographs, biographies, skills, departments, social links, founder/leadership flags, order, and visibility.
 - **News & insights**: rich text, author, category, tags, SEO, featured selection, draft/published/scheduled/archived state.
 - **Inquiries**: private messages, status, assigned administrator, internal notes, and archive flag.
 - **Media**: image upload, search, selection, previews, and safe deletion.
-- **Website settings**: contact details, social URLs, navigation, footer, SEO, default theme, homepage section visibility, and section headings/descriptions.
+- **Website settings**: company name and tagline, light/dark logos and icons, contact details, social URLs, header and footer navigation, header call to action, hero highlight cards, footer, SEO, default theme, homepage section visibility, and section headings/descriptions.
+
+For an existing installation using the original business-model messaging, back up the database with `npm run db:backup`, then run `node --env-file=.env --import tsx scripts/rebrand.ts` once. This applies the digital platform and innovation positioning, retains prior versions in revision history, hides speculative sector offerings, and preserves accounts, inquiries, and projects. New installations receive this content from the additive seed. Old service URLs redirect to their renamed pages.
+
+Public content saves invalidate the site layout and refresh the dashboard preview. Switching modules clears the previous editor, superseded searches are cancelled, and requests time out with a recoverable message. Page links show progress during slow navigation, with a full page load option after eight seconds.
 
 **Save changes** applies the values, including the publication/visibility field. **Save draft** preserves published content while storing pending edits. Reopening an entry loads its latest saved draft. **Drafts & revision history** loads an earlier version into the editor; review it and save to apply it. Conflicting edits return an error instead of silently overwriting another editor's changes.
 

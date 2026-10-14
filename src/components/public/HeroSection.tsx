@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { ArrowRight, Layers, Sparkles, Shield, Cpu } from "lucide-react";
+import Link from "@/components/SiteLink";
+import { brandHero, defaultHighlights } from "@/lib/branding";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 interface HeroData {
   backgroundImage?: string | null;
@@ -13,18 +14,20 @@ interface HeroData {
   ctaSecondaryUrl?: string;
 }
 
-export function HeroSection({ hero }: { hero?: HeroData }) {
-  const headline =
-    hero?.headline || "Architecting & Operating Next-Gen Digital Platforms";
-  const subtitle =
-    hero?.subtitle || "B2B • B2C • D2C Digital Platforms & Scalable Systems";
-  const description =
-    hero?.description ||
-    "Bunyaad Solutions (بنیاد) creates, launches, and operates high-performance digital platforms. From multi-vendor marketplaces to property portals and enterprise SaaS, we build the technological foundations that power market leaders.";
-  const ctaPrimaryText = hero?.ctaPrimaryText || "Explore Platforms";
-  const ctaPrimaryUrl = hero?.ctaPrimaryUrl || "/#projects";
-  const ctaSecondaryText = hero?.ctaSecondaryText || "Partner With Us";
-  const ctaSecondaryUrl = hero?.ctaSecondaryUrl || "/#contact";
+export function HeroSection({
+  hero,
+  highlights = defaultHighlights,
+}: {
+  hero?: HeroData;
+  highlights?: typeof defaultHighlights;
+}) {
+  const headline = hero?.headline ?? brandHero.headline;
+  const subtitle = hero?.subtitle ?? brandHero.subtitle;
+  const description = hero?.description ?? brandHero.description;
+  const ctaPrimaryText = hero?.ctaPrimaryText ?? brandHero.ctaPrimaryText;
+  const ctaPrimaryUrl = hero?.ctaPrimaryUrl ?? brandHero.ctaPrimaryUrl;
+  const ctaSecondaryText = hero?.ctaSecondaryText ?? brandHero.ctaSecondaryText;
+  const ctaSecondaryUrl = hero?.ctaSecondaryUrl ?? brandHero.ctaSecondaryUrl;
 
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -68,12 +71,14 @@ export function HeroSection({ hero }: { hero?: HeroData }) {
               <ArrowRight className="w-4 h-4" />
             </Link>
 
-            <Link
-              href={ctaSecondaryUrl}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 font-semibold text-base backdrop-blur transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <span>{ctaSecondaryText}</span>
-            </Link>
+            {ctaSecondaryText && ctaSecondaryUrl && (
+              <Link
+                href={ctaSecondaryUrl}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 font-semibold text-base backdrop-blur transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <span>{ctaSecondaryText}</span>
+              </Link>
+            )}
           </div>
 
           {hero?.backgroundImage && (
@@ -83,68 +88,23 @@ export function HeroSection({ hero }: { hero?: HeroData }) {
               className="w-full max-h-96 rounded-2xl object-cover"
             />
           )}
-          {/* Capability Cards */}
-          <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
-            <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
-              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-1">
-                <Layers className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">
-                  Verticals
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
-                B2B, B2C, D2C
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Multi-channel commerce
-              </p>
+          {!!highlights.length && (
+            <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+              {highlights.map((item, i) => (
+                <div
+                  key={i}
+                  className="p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40"
+                >
+                  <p className="text-xl font-bold text-zinc-900 dark:text-white">
+                    {item.title}
+                  </p>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
             </div>
-
-            <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
-              <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 mb-1">
-                <Cpu className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">
-                  Architecture
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
-                Scalable Cloud
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Modern micro-stacks
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
-              <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 mb-1">
-                <Shield className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">
-                  Lifecycle
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
-                Build & Operate
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Active management
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">
-                  Excellence
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
-                Enterprise Ready
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                High uptime & security
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

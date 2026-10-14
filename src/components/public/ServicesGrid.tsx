@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/SiteLink";
 import { useSiteSettings, sectionCopy } from "./SiteContext";
 import {
   Building2,
@@ -45,7 +45,7 @@ export function ServicesGrid({ services }: { services: ServiceItem[] }) {
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-            What We Do
+            {sectionCopy(settings, "services_eyebrow", "What we create")}
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
             {sectionCopy(
@@ -58,7 +58,7 @@ export function ServicesGrid({ services }: { services: ServiceItem[] }) {
             {sectionCopy(
               settings,
               "services_description",
-              "Technology solutions for businesses and consumers across B2B, B2C and D2C models.",
+              "Research, design, and development for useful digital platforms and innovations.",
             )}
           </p>
         </div>
@@ -97,7 +97,7 @@ export function ServicesGrid({ services }: { services: ServiceItem[] }) {
 
                 <div className="pt-6 mt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
                   <span className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                    {service.targetAudience || "Enterprise & Commercial"}
+                    {service.targetAudience || ""}
                   </span>
                   <Link
                     href={"/solutions/" + service.slug}

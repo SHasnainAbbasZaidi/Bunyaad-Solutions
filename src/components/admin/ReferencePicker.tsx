@@ -1,4 +1,5 @@
 "use client";
+import { clientRequest } from "@/lib/client-request";
 import { useEffect, useState } from "react";
 export function ReferencePicker({
   kind,
@@ -17,7 +18,7 @@ export function ReferencePicker({
     [error, setError] = useState("");
   useEffect(() => {
     let active = true;
-    fetch("/api/admin/references")
+    clientRequest("/api/admin/references")
       .then(async (r) => {
         const body = await r.json();
         if (!r.ok) throw new Error(body.error);

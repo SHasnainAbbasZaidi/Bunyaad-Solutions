@@ -1,4 +1,7 @@
 "use client";
+import { useState } from "react";
+import { MediaLibrary } from "./MediaLibrary";
+import { defaultSectionCopy } from "@/lib/branding";
 const sections = [
   "hero",
   "about",
@@ -9,19 +12,7 @@ const sections = [
   "news",
   "contact",
 ];
-const copyKeys = [
-  "about_title",
-  "services_title",
-  "services_description",
-  "projects_title",
-  "projects_description",
-  "team_title",
-  "team_description",
-  "news_title",
-  "news_description",
-  "contact_title",
-  "contact_description",
-];
+const copyKeys = Object.keys(defaultSectionCopy);
 export function SettingsValue({
   setting,
   value,
@@ -31,6 +22,80 @@ export function SettingsValue({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const [showMedia, setShowMedia] = useState(false);
+  if (["logo_light", "logo_dark", "icon_light", "icon_dark"].includes(setting))
+    return (
+      <div>
+        {value && (
+          <img
+            src={value}
+            alt="Selected brand asset"
+            className="max-h-24 max-w-64 object-contain mb-3"
+          />
+        )}
+        <button type="button" onClick={() => setShowMedia(!showMedia)}>
+          Choose brand image
+        </button>
+        {showMedia && (
+          <MediaLibrary
+            onSelect={(url) => {
+              onChange(url);
+              setShowMedia(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  if (setting === "hero_highlights") {
+    let items: { title: string; description: string }[] = [];
+    try {
+      const parsed = JSON.parse(value || "[]");
+      if (Array.isArray(parsed)) items = parsed;
+    } catch {}
+    return (
+      <fieldset>
+        <legend>Hero highlight cards (display order)</legend>
+        {items.map((item, i) => (
+          <div className="panel mt-3" key={i}>
+            {(["title", "description"] as const).map((field) => (
+              <label key={field}>
+                {field}
+                <input
+                  value={item[field]}
+                  onChange={(e) =>
+                    onChange(
+                      JSON.stringify(
+                        items.map((v, j) =>
+                          j === i ? { ...v, [field]: e.target.value } : v,
+                        ),
+                      ),
+                    )
+                  }
+                />
+              </label>
+            ))}
+            <button
+              type="button"
+              onClick={() =>
+                onChange(JSON.stringify(items.filter((_, j) => j !== i)))
+              }
+            >
+              Remove card
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          disabled={items.length >= 4}
+          onClick={() =>
+            onChange(JSON.stringify([...items, { title: "", description: "" }]))
+          }
+        >
+          Add card
+        </button>
+      </fieldset>
+    );
+  }
   if (setting === "theme_default")
     return (
       <label>
@@ -70,7 +135,7 @@ export function SettingsValue({
       </fieldset>
     );
   }
-  if (setting === "navigation") {
+  if (setting === "navigation" || setting === "footer_navigation") {
     let data: { name: string; href: string }[] = [];
     try {
       data = JSON.parse(value || "[]");
@@ -152,7 +217,7 @@ export function SettingsValue({
     } catch {}
     return (
       <fieldset>
-        <legend>Homepage section headings & descriptions</legend>
+        <legend>Public section headings, descriptions & empty states</legend>
         <div className="grid gap-4 mt-4">
           {copyKeys.map((key) => (
             <label key={key}>

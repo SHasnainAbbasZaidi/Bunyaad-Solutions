@@ -1,4 +1,5 @@
 "use client";
+import { clientRequest } from "@/lib/client-request";
 import { useCallback, useEffect, useState } from "react";
 type Media = {
   id: string;
@@ -22,7 +23,7 @@ export function MediaLibrary({
     [busy, setBusy] = useState(false);
   const load = useCallback(async () => {
     try {
-      const response = await fetch(
+      const response = await clientRequest(
         "/api/admin/media?q=" + encodeURIComponent(q) + "&page=" + page,
       );
       const body = await response.json();
@@ -53,7 +54,7 @@ export function MediaLibrary({
           const form = e.currentTarget;
           setBusy(true);
           try {
-            const response = await fetch("/api/admin/media", {
+            const response = await clientRequest("/api/admin/media", {
               method: "POST",
               body: new FormData(form),
             });
@@ -132,7 +133,7 @@ export function MediaLibrary({
                 onClick={async () => {
                   if (!confirm("Delete this unused image?")) return;
                   try {
-                    const response = await fetch("/api/admin/media", {
+                    const response = await clientRequest("/api/admin/media", {
                       method: "DELETE",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ id: media.id }),

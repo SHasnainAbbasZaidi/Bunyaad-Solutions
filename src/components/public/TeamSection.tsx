@@ -83,7 +83,7 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-            Leadership & Visionaries
+            {sectionCopy(settings, "team_eyebrow", "People & ideas")}
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
             {sectionCopy(settings, "team_title", "Meet the Founders & Team")}
@@ -98,7 +98,13 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
         </div>
 
         {!teamMembers.length && (
-          <p className="text-center">Team profiles will be available soon.</p>
+          <p className="text-center">
+            {sectionCopy(
+              settings,
+              "team_empty",
+              "Meet our team here as profiles are added.",
+            )}
+          </p>
         )}
         {/* Founding Partners Featured Cards */}
         <div className={founders.length ? "mb-14" : "hidden"}>

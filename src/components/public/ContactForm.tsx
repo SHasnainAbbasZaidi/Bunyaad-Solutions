@@ -1,4 +1,5 @@
 "use client";
+import { clientRequest } from "@/lib/client-request";
 
 import * as React from "react";
 import { useSiteSettings, sectionCopy } from "./SiteContext";
@@ -34,7 +35,7 @@ export function ContactForm() {
     setErrorMsg(null);
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await clientRequest("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, website }),
@@ -70,7 +71,7 @@ export function ContactForm() {
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                Initiate Conversation
+                {sectionCopy(settings, "contact_eyebrow", "Let’s connect")}
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
                 {sectionCopy(
@@ -83,7 +84,7 @@ export function ContactForm() {
                 {sectionCopy(
                   settings,
                   "contact_description",
-                  "Talk to us about a platform, enterprise solution or business partnership.",
+                  "Share an idea, explore a collaboration, or learn more about what we create.",
                 )}
               </p>
             </div>
@@ -146,9 +147,9 @@ export function ContactForm() {
                     Inquiry Received
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-300 max-w-md mx-auto text-sm sm:text-base">
-                    Thank you for reaching out to Bunyaad Solutions. Our
-                    leadership team will review your requirements and respond as
-                    soon as possible.
+                    Thank you for reaching out to{" "}
+                    {settings.site_name || "Bunyaad Solutions"}. Our team will
+                    read your message and respond as soon as possible.
                   </p>
                   <button
                     onClick={() => setSuccess(false)}
@@ -171,7 +172,11 @@ export function ContactForm() {
                     </label>
                   </div>
                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
-                    Partner Inquiry Form
+                    {sectionCopy(
+                      settings,
+                      "contact_form_title",
+                      "Send us a message",
+                    )}
                   </h3>
 
                   {errorMsg && (
@@ -244,7 +249,7 @@ export function ContactForm() {
                         onChange={(e) =>
                           setFormData({ ...formData, company: e.target.value })
                         }
-                        placeholder="Enterprise Corp"
+                        placeholder="Your organization (optional)"
                         className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -254,7 +259,7 @@ export function ContactForm() {
                         htmlFor="contact-inquiryType"
                         className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
                       >
-                        Platform Category
+                        Topic
                       </label>
                       <select
                         id="contact-inquiryType"
@@ -291,7 +296,7 @@ export function ContactForm() {
                       onChange={(e) =>
                         setFormData({ ...formData, subject: e.target.value })
                       }
-                      placeholder="e.g. New B2B Wholesale Portal Architecture"
+                      placeholder="e.g. An idea for a new digital experience"
                       className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -301,7 +306,7 @@ export function ContactForm() {
                       htmlFor="contact-message"
                       className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
                     >
-                      Project Details & Objectives *
+                      Message *
                     </label>
                     <textarea
                       required
@@ -312,7 +317,7 @@ export function ContactForm() {
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
                       }
-                      placeholder="Tell us about your digital platform goals, timelines, and operational requirements..."
+                      placeholder="Tell us about your idea, question, or collaboration..."
                       className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                     />
                   </div>
@@ -323,10 +328,16 @@ export function ContactForm() {
                     className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md shadow-blue-500/20 disabled:opacity-50 transition-all cursor-pointer"
                   >
                     {loading ? (
-                      <span>Transmitting Inquiry...</span>
+                      <span>Sending message...</span>
                     ) : (
                       <>
-                        <span>Submit Partner Inquiry</span>
+                        <span>
+                          {sectionCopy(
+                            settings,
+                            "contact_submit_text",
+                            "Send message",
+                          )}
+                        </span>
                         <Send className="w-4 h-4" />
                       </>
                     )}

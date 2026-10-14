@@ -75,6 +75,14 @@ export async function saveContent(
       .map((f) => data[f.key])
       .filter((v): v is string => typeof v === "string" && !!v);
     if (gallery) mediaUrls.push(...gallery);
+    if (
+      resource === "settings" &&
+      ["logo_light", "logo_dark", "icon_light", "icon_dark"].includes(
+        String(data.key),
+      ) &&
+      data.value
+    )
+      mediaUrls.push(String(data.value));
     for (const url of new Set(mediaUrls)) {
       if (!(await tx.media.findFirst({ where: { url } })))
         throw new HttpError(
@@ -190,6 +198,8 @@ export async function saveContent(
         },
         data: { published: false },
       });
+    if (resource === "projects" && !previous)
+      data.businessModel = "UNSPECIFIED";
     const row = previous
       ? await delegate(resource, tx).update({
           where: { id: previous.id },
