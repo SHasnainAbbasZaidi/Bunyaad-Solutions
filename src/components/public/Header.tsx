@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSiteSettings } from "./SiteContext";
 import { ThemeToggle } from "./ThemeToggle";
-import { Menu, X, ArrowRight, ShieldCheck } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -87,15 +87,6 @@ export function Header() {
             <ThemeToggle />
 
             <Link
-              href="/admin/dashboard"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-              title="Admin Portal"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin</span>
-            </Link>
-
-            <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-blue-500/20 hover:shadow-md transition-all duration-200 active:scale-95"
             >
@@ -139,14 +130,6 @@ export function Header() {
             ))}
           </nav>
           <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-3">
-            <Link
-              href="/admin/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="inline-flex items-center justify-center gap-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800/80 rounded-lg"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Admin Portal
-            </Link>
             <Link
               href="/contact"
               onClick={() => setMobileMenuOpen(false)}

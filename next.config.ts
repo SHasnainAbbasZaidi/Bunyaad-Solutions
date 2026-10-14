@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   experimental: { cpus: 2 },
   poweredByHeader: false,
   async headers() {
+    // React's development stack reconstruction requires eval; production does not.
+    const developmentScriptPolicy =
+      process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
     return [
       {
         source: "/:path*",
@@ -19,7 +22,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+              `default-src 'self'; script-src 'self' 'unsafe-inline'${developmentScriptPolicy}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`,
           },
         ],
       },
