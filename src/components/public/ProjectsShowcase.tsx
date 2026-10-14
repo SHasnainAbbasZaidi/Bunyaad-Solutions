@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import {projectStatuses} from "@/lib/cms-config";
-import {useSiteSettings,sectionCopy} from "./SiteContext";
+import { projectStatuses } from "@/lib/cms-config";
+import { useSiteSettings, sectionCopy } from "./SiteContext";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 
@@ -21,7 +21,10 @@ interface ProjectItem {
   technologies?: string | null;
 }
 
-const statusConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+const statusConfig: Record<
+  string,
+  { label: string; bg: string; text: string; dot: string }
+> = {
   LIVE: {
     label: "Live & Operating",
     bg: "bg-emerald-500/10 dark:bg-emerald-500/20",
@@ -49,14 +52,19 @@ const statusConfig: Record<string, { label: string; bg: string; text: string; do
 };
 
 export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
-  const settings=useSiteSettings();
-  const [query,setQuery]=React.useState("");
-  const [status,setStatus]=React.useState("");
-  const [category,setCategory]=React.useState("");
+  const settings = useSiteSettings();
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState("");
+  const [category, setCategory] = React.useState("");
   const [filter, setFilter] = React.useState<string>("ALL");
 
   const filteredProjects = projects.filter((project) => {
-    if(!project.name.toLowerCase().includes(query.toLowerCase()) || (status && project.status!==status) || (category && project.industry!==category)) return false;
+    if (
+      !project.name.toLowerCase().includes(query.toLowerCase()) ||
+      (status && project.status !== status) ||
+      (category && project.industry !== category)
+    )
+      return false;
     if (filter === "ALL") return true;
     return project.businessModel.toUpperCase() === filter;
   });
@@ -71,10 +79,14 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
               Portfolio & Ventures
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
-              {sectionCopy(settings,"projects_title","Our Digital Platforms")}
+              {sectionCopy(settings, "projects_title", "Our Digital Platforms")}
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400 max-w-xl text-base sm:text-lg">
-              {sectionCopy(settings,"projects_description","Explore our planned and active digital platform initiatives.")}
+              {sectionCopy(
+                settings,
+                "projects_description",
+                "Explore our planned and active digital platform initiatives.",
+              )}
             </p>
           </div>
 
@@ -96,16 +108,56 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
           </div>
         </div>
 
-        <div className="public-filters mb-8"><label>Search projects<input value={query} onChange={e=>setQuery(e.target.value)}/></label><label>Category<select value={category} onChange={e=>setCategory(e.target.value)}><option value="">All categories</option>{[...new Set(projects.map(p=>p.industry).filter(Boolean))].map(c=><option key={c} value={c!}>{c}</option>)}</select></label><label>Status<select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All statuses</option>{projectStatuses.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}</select></label></div>
-        {!filteredProjects.length&&<p className="py-10">No published projects match these filters.</p>}
+        <div className="public-filters mb-8">
+          <label>
+            Search projects
+            <input value={query} onChange={(e) => setQuery(e.target.value)} />
+          </label>
+          <label>
+            Category
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">All categories</option>
+              {[
+                ...new Set(projects.map((p) => p.industry).filter(Boolean)),
+              ].map((c) => (
+                <option key={c} value={c!}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Status
+            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">All statuses</option>
+              {projectStatuses.map((s) => (
+                <option key={s} value={s}>
+                  {s.replaceAll("_", " ")}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        {!filteredProjects.length && (
+          <p className="py-10">No published projects match these filters.</p>
+        )}
         {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => {
-            const statusInfo = statusConfig[project.status] || {...statusConfig.CONCEPT,label:project.status.replaceAll("_"," ")};
+            const statusInfo = statusConfig[project.status] || {
+              ...statusConfig.CONCEPT,
+              label: project.status.replaceAll("_", " "),
+            };
             let techList: string[] = [];
             try {
               if (project.technologies) {
-                const parsed=JSON.parse(project.technologies);techList=Array.isArray(parsed)?parsed.filter(t=>typeof t==="string"):[];
+                const parsed = JSON.parse(project.technologies);
+                techList = Array.isArray(parsed)
+                  ? parsed.filter((t) => typeof t === "string")
+                  : [];
               }
             } catch {
               techList = [];
@@ -117,15 +169,35 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
                 className="group flex flex-col justify-between rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 p-7 shadow-xs hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1.5"
               >
                 <div>
-                  {project.coverImage&&<img src={project.coverImage} alt={project.name} loading="lazy" className="w-full h-44 object-cover rounded-xl mb-5"/>}
-                  {project.logo&&<img src={project.logo} alt={project.name+" logo"} loading="lazy" className="h-12 max-w-40 object-contain mb-4"/>}
-                  {project.featured&&<p className="text-xs text-blue-600 dark:text-blue-400 mb-3">Featured platform</p>}
+                  {project.coverImage && (
+                    <img
+                      src={project.coverImage}
+                      alt={project.name}
+                      loading="lazy"
+                      className="w-full h-44 object-cover rounded-xl mb-5"
+                    />
+                  )}
+                  {project.logo && (
+                    <img
+                      src={project.logo}
+                      alt={project.name + " logo"}
+                      loading="lazy"
+                      className="h-12 max-w-40 object-contain mb-4"
+                    />
+                  )}
+                  {project.featured && (
+                    <p className="text-xs text-blue-600 dark:text-blue-400 mb-3">
+                      Featured platform
+                    </p>
+                  )}
                   {/* Top Bar: Status & Business Model */}
                   <div className="flex items-center justify-between gap-2 mb-5">
                     <span
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusInfo.bg} ${statusInfo.text}`}
                     >
-                      <span className={`w-2 h-2 rounded-full ${statusInfo.dot} animate-pulse`} />
+                      <span
+                        className={`w-2 h-2 rounded-full ${statusInfo.dot} animate-pulse`}
+                      />
                       {statusInfo.label}
                     </span>
 
@@ -166,9 +238,11 @@ export function ProjectsShowcase({ projects }: { projects: ProjectItem[] }) {
 
                 {/* Footer link */}
                 <div className="pt-6 mt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-                  <span className="text-xs text-zinc-400">Architecture & Operations</span>
+                  <span className="text-xs text-zinc-400">
+                    Architecture & Operations
+                  </span>
                   <Link
-                    href={"/projects/"+project.slug}
+                    href={"/projects/" + project.slug}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                   >
                     <span>View project</span>

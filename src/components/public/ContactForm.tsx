@@ -1,13 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { useSiteSettings,sectionCopy } from "./SiteContext";
+import { useSiteSettings, sectionCopy } from "./SiteContext";
 import { inquiryCategories } from "@/lib/cms-config";
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 export function ContactForm() {
   const settings = useSiteSettings();
-  const [website,setWebsite] = React.useState("");
+  const [website, setWebsite] = React.useState("");
   const [formData, setFormData] = React.useState({
     fullName: "",
     email: "",
@@ -30,7 +37,7 @@ export function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({...formData,website}),
+        body: JSON.stringify({ ...formData, website }),
       });
 
       const data = await res.json();
@@ -66,10 +73,18 @@ export function ContactForm() {
                 Initiate Conversation
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
-                {sectionCopy(settings,"contact_title","Let’s build your digital platform")}
+                {sectionCopy(
+                  settings,
+                  "contact_title",
+                  "Let’s build your digital platform",
+                )}
               </h2>
               <p className="text-zinc-600 dark:text-zinc-300 text-base sm:text-lg leading-relaxed">
-                {sectionCopy(settings,"contact_description","Talk to us about a platform, enterprise solution or business partnership.")}
+                {sectionCopy(
+                  settings,
+                  "contact_description",
+                  "Talk to us about a platform, enterprise solution or business partnership.",
+                )}
               </p>
             </div>
 
@@ -79,8 +94,12 @@ export function ContactForm() {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">Direct Email</h4>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">{settings.contact_email || "Use the inquiry form"}</p>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                    Direct Email
+                  </h4>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {settings.contact_email || "Use the inquiry form"}
+                  </p>
                 </div>
               </div>
 
@@ -89,8 +108,12 @@ export function ContactForm() {
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">Direct Line</h4>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">{settings.contact_phone || "Available on request"}</p>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                    Direct Line
+                  </h4>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {settings.contact_phone || "Available on request"}
+                  </p>
                 </div>
               </div>
 
@@ -99,9 +122,12 @@ export function ContactForm() {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">Headquarters</h4>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                    Headquarters
+                  </h4>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    {settings.contact_address || "Contact us for meeting arrangements"}
+                    {settings.contact_address ||
+                      "Contact us for meeting arrangements"}
                   </p>
                 </div>
               </div>
@@ -120,7 +146,9 @@ export function ContactForm() {
                     Inquiry Received
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-300 max-w-md mx-auto text-sm sm:text-base">
-                    Thank you for reaching out to Bunyaad Solutions. Our leadership team will review your requirements and respond as soon as possible.
+                    Thank you for reaching out to Bunyaad Solutions. Our
+                    leadership team will review your requirements and respond as
+                    soon as possible.
                   </p>
                   <button
                     onClick={() => setSuccess(false)}
@@ -131,13 +159,26 @@ export function ContactForm() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="honeypot" aria-hidden="true"><label>Website<input value={website} onChange={e=>setWebsite(e.target.value)} tabIndex={-1} autoComplete="off" /></label></div>
+                  <div className="honeypot" aria-hidden="true">
+                    <label>
+                      Website
+                      <input
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </label>
+                  </div>
                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
                     Partner Inquiry Form
                   </h3>
 
                   {errorMsg && (
-                    <div role="alert" className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-sm flex items-center gap-2">
+                    <div
+                      role="alert"
+                      className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-sm flex items-center gap-2"
+                    >
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{errorMsg}</span>
                     </div>
@@ -145,7 +186,10 @@ export function ContactForm() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="contact-fullName" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      <label
+                        htmlFor="contact-fullName"
+                        className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                      >
                         Full Name *
                       </label>
                       <input
@@ -154,14 +198,19 @@ export function ContactForm() {
                         id="contact-fullName"
                         name="fullName"
                         value={formData.fullName}
-                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, fullName: e.target.value })
+                        }
                         placeholder="Syed Ali"
                         className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="contact-email" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      <label
+                        htmlFor="contact-email"
+                        className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                      >
                         Email Address *
                       </label>
                       <input
@@ -170,7 +219,9 @@ export function ContactForm() {
                         id="contact-email"
                         name="email"
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
                         placeholder="ali@company.com"
                         className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                       />
@@ -179,7 +230,10 @@ export function ContactForm() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="contact-company" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      <label
+                        htmlFor="contact-company"
+                        className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                      >
                         Company / Organization
                       </label>
                       <input
@@ -187,55 +241,77 @@ export function ContactForm() {
                         id="contact-company"
                         name="company"
                         value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, company: e.target.value })
+                        }
                         placeholder="Enterprise Corp"
                         className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="contact-inquiryType" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      <label
+                        htmlFor="contact-inquiryType"
+                        className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                      >
                         Platform Category
                       </label>
                       <select
                         id="contact-inquiryType"
                         name="inquiryType"
                         value={formData.inquiryType}
-                        onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            inquiryType: e.target.value,
+                          })
+                        }
                         className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                       >
-                        {inquiryCategories.map(category=><option key={category}>{category}</option>)}
+                        {inquiryCategories.map((category) => (
+                          <option key={category}>{category}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="contact-subject" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    <label
+                      htmlFor="contact-subject"
+                      className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                    >
                       Subject *
                     </label>
                     <input
                       type="text"
                       required
                       id="contact-subject"
-                        name="subject"
-                        value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      name="subject"
+                      value={formData.subject}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subject: e.target.value })
+                      }
                       placeholder="e.g. New B2B Wholesale Portal Architecture"
                       className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact-message" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5"
+                    >
                       Project Details & Objectives *
                     </label>
                     <textarea
                       required
                       rows={4}
                       id="contact-message"
-                        name="message"
-                        value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      name="message"
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
                       placeholder="Tell us about your digital platform goals, timelines, and operational requirements..."
                       className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                     />

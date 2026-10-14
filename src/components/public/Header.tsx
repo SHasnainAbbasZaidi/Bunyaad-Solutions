@@ -29,8 +29,10 @@ export function Header() {
     { name: "Contact", href: "/contact" },
   ];
 
-  let navLinks=defaultLinks;
-  try {if(settings.navigation)navLinks=JSON.parse(settings.navigation);}catch{}
+  let navLinks = defaultLinks;
+  try {
+    if (settings.navigation) navLinks = JSON.parse(settings.navigation);
+  } catch {}
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -111,7 +113,11 @@ export function Header() {
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>

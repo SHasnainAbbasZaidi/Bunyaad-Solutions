@@ -14,8 +14,10 @@ interface HeroData {
 }
 
 export function HeroSection({ hero }: { hero?: HeroData }) {
-  const headline = hero?.headline || "Architecting & Operating Next-Gen Digital Platforms";
-  const subtitle = hero?.subtitle || "B2B • B2C • D2C Digital Platforms & Scalable Systems";
+  const headline =
+    hero?.headline || "Architecting & Operating Next-Gen Digital Platforms";
+  const subtitle =
+    hero?.subtitle || "B2B • B2C • D2C Digital Platforms & Scalable Systems";
   const description =
     hero?.description ||
     "Bunyaad Solutions (بنیاد) creates, launches, and operates high-performance digital platforms. From multi-vendor marketplaces to property portals and enterprise SaaS, we build the technological foundations that power market leaders.";
@@ -34,7 +36,12 @@ export function HeroSection({ hero }: { hero?: HeroData }) {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={"max-w-4xl mx-auto space-y-8 "+(hero?.visualSettings==="left"?"text-left":"text-center")}>
+        <div
+          className={
+            "max-w-4xl mx-auto space-y-8 " +
+            (hero?.visualSettings === "left" ? "text-left" : "text-center")
+          }
+        >
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/25 bg-blue-50/60 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-semibold tracking-wide backdrop-blur animate-fade-in-down shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
@@ -69,43 +76,73 @@ export function HeroSection({ hero }: { hero?: HeroData }) {
             </Link>
           </div>
 
-          {hero?.backgroundImage && <img src={hero.backgroundImage} alt="" className="w-full max-h-96 rounded-2xl object-cover" />}
+          {hero?.backgroundImage && (
+            <img
+              src={hero.backgroundImage}
+              alt=""
+              className="w-full max-h-96 rounded-2xl object-cover"
+            />
+          )}
           {/* Capability Cards */}
           <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
             <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
               <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-1">
                 <Layers className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Verticals</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Verticals
+                </span>
               </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">B2B, B2C, D2C</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Multi-channel commerce</p>
+              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
+                B2B, B2C, D2C
+              </p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Multi-channel commerce
+              </p>
             </div>
 
             <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
               <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 mb-1">
                 <Cpu className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Architecture</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Architecture
+                </span>
               </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">Scalable Cloud</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Modern micro-stacks</p>
+              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
+                Scalable Cloud
+              </p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Modern micro-stacks
+              </p>
             </div>
 
             <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
               <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 mb-1">
                 <Shield className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Lifecycle</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Lifecycle
+                </span>
               </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">Build & Operate</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Active management</p>
+              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
+                Build & Operate
+              </p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Active management
+              </p>
             </div>
 
             <div className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur">
               <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
                 <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Excellence</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Excellence
+                </span>
               </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-white">Enterprise Ready</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">High uptime & security</p>
+              <p className="text-2xl font-bold text-zinc-900 dark:text-white">
+                Enterprise Ready
+              </p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                High uptime & security
+              </p>
             </div>
           </div>
         </div>

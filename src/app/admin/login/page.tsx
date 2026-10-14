@@ -5,7 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { ShieldCheck, Lock, Mail, ArrowRight, AlertCircle, ArrowLeft } from "lucide-react";
+import {
+  ShieldCheck,
+  Lock,
+  Mail,
+  ArrowRight,
+  AlertCircle,
+  ArrowLeft,
+} from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -78,7 +85,8 @@ export default function AdminLoginPage() {
             Administrator Authentication
           </h1>
           <p className="text-xs text-zinc-400">
-            Sign in to manage company content, platform statuses, and customer inquiries.
+            Sign in to manage company content, platform statuses, and customer
+            inquiries.
           </p>
         </div>
 
@@ -93,7 +101,10 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="admin-email" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+              <label
+                htmlFor="admin-email"
+                className="block text-xs font-semibold text-zinc-300 mb-1.5"
+              >
                 Admin Email Address
               </label>
               <div className="relative">
@@ -111,7 +122,10 @@ export default function AdminLoginPage() {
             </div>
 
             <div>
-              <label htmlFor="admin-password" className="block text-xs font-semibold text-zinc-300 mb-1.5">
+              <label
+                htmlFor="admin-password"
+                className="block text-xs font-semibold text-zinc-300 mb-1.5"
+              >
                 Password
               </label>
               <div className="relative">
@@ -128,7 +142,9 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            <p className="text-xs text-zinc-400">Need access? Ask a Super Admin for a secure password reset link.</p>
+            <p className="text-xs text-zinc-400">
+              Need access? Ask a Super Admin for a secure password reset link.
+            </p>
 
             <button
               type="submit"

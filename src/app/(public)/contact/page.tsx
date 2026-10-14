@@ -2,7 +2,12 @@ import { Header } from "@/components/public/Header";
 import { ContactForm } from "@/components/public/ContactForm";
 import { Footer } from "@/components/public/Footer";
 
-export const metadata={"title":"Contact us","description":"Start a conversation about development, collaboration or a business partnership.","alternates":{"canonical":"/contact"}};
+export const metadata = {
+  title: "Contact us",
+  description:
+    "Start a conversation about development, collaboration or a business partnership.",
+  alternates: { canonical: "/contact" },
+};
 
 export default function ContactPage() {
   return (

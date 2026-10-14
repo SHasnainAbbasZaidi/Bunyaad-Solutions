@@ -16,7 +16,10 @@ export const contactFormSchema = z.object({
     "Careers",
     "Other",
   ]),
-  message: z.string().min(10, "Message must be at least 10 characters").max(5000),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(5000),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;

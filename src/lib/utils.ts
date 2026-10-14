@@ -56,23 +56,35 @@ export function parseJsonArray(value: string | null | undefined): string[] {
 export function getStatusColor(status: string): string {
   const colors: Record<string, string> = {
     CONCEPT: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-    PLANNING: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    IN_DEVELOPMENT: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-    TESTING: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
-    COMING_SOON: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
+    PLANNING:
+      "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+    IN_DEVELOPMENT:
+      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    TESTING:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+    COMING_SOON:
+      "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
     LIVE: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
-    ON_HOLD: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+    ON_HOLD:
+      "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
     ARCHIVED: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-500",
     // Article statuses
-    DRAFT: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
-    PUBLISHED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+    DRAFT:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+    PUBLISHED:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
     // Inquiry statuses
     NEW: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    IN_PROGRESS: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-    REPLIED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+    IN_PROGRESS:
+      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    REPLIED:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
     CLOSED: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-500",
   };
-  return colors[status] || "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+  return (
+    colors[status] ||
+    "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+  );
 }
 
 export function getStatusLabel(status: string): string {

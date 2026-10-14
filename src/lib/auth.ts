@@ -17,11 +17,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        if (typeof credentials.email !== "string" || typeof credentials.password !== "string") return null;
+        if (
+          typeof credentials.email !== "string" ||
+          typeof credentials.password !== "string"
+        )
+          return null;
         const email = credentials.email.trim().toLowerCase();
         const password = credentials.password;
         if (email.length > 254 || password.length > 128) return null;
-        const checks = await Promise.all([checkRateLimit(`login:email:${email}`, RATE_LIMITS.login), checkRateLimit(`login:ip:${getClientIp(request)}`, { maxRequests: 30, windowSeconds: 300 })]);
+        const checks = await Promise.all([
+          checkRateLimit(`login:email:${email}`, RATE_LIMITS.login),
+          checkRateLimit(`login:ip:${getClientIp(request)}`, {
+            maxRequests: 30,
+            windowSeconds: 300,
+          }),
+        ]);
         if (checks.some((check) => !check.allowed)) return null;
 
         const user = await prisma.user.findUnique({
@@ -29,7 +39,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!user || !user.active) {
-          await compare(password, "$2b$12$C6UzMDM.H6dfI/f/IKcEe.1dbvtQPxfAW4xE0X7UGxTZyOjShQSr2");
+          await compare(
+            password,
+            "$2b$12$C6UzMDM.H6dfI/f/IKcEe.1dbvtQPxfAW4xE0X7UGxTZyOjShQSr2",
+          );
           return null;
         }
 
@@ -65,7 +78,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = (user as { role: string }).role;
-        token.sessionVersion = (user as unknown as { sessionVersion: number }).sessionVersion;
+        token.sessionVersion = (
+          user as unknown as { sessionVersion: number }
+        ).sessionVersion;
       }
       return token;
     },
@@ -73,7 +88,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         (session.user as { role: string }).role = token.role as string;
-        (session.user as unknown as { sessionVersion: number }).sessionVersion = token.sessionVersion as number;
+        (session.user as unknown as { sessionVersion: number }).sessionVersion =
+          token.sessionVersion as number;
       }
       return session;
     },
@@ -83,7 +99,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isOnLoginPage = nextUrl.pathname === "/admin/login";
 
       if (isOnAdmin && !isOnLoginPage) {
-        if (!isLoggedIn) return Response.redirect(new URL("/admin/login", nextUrl));
+        if (!isLoggedIn)
+          return Response.redirect(new URL("/admin/login", nextUrl));
         return true;
       }
 

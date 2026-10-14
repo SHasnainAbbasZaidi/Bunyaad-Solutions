@@ -3,8 +3,11 @@ import { Header } from "@/components/public/Header";
 import { AboutSection } from "@/components/public/AboutSection";
 import { Footer } from "@/components/public/Footer";
 
-
-export const metadata={"title":"About us","description":"Our mission, vision and approach to digital innovation.","alternates":{"canonical":"/about"}};
+export const metadata = {
+  title: "About us",
+  description: "Our mission, vision and approach to digital innovation.",
+  alternates: { canonical: "/about" },
+};
 
 export default async function AboutPage() {
   const aboutSections = await prisma.aboutSection.findMany({

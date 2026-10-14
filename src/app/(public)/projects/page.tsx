@@ -3,12 +3,16 @@ import { Header } from "@/components/public/Header";
 import { ProjectsShowcase } from "@/components/public/ProjectsShowcase";
 import { Footer } from "@/components/public/Footer";
 
-
-export const metadata={"title":"Projects & platforms","description":"Explore our digital platform initiatives and their development status.","alternates":{"canonical":"/projects"}};
+export const metadata = {
+  title: "Projects & platforms",
+  description:
+    "Explore our digital platform initiatives and their development status.",
+  alternates: { canonical: "/projects" },
+};
 
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
-    where: { published: true, status: {not:"ARCHIVED"} },
+    where: { published: true, status: { not: "ARCHIVED" } },
     orderBy: { sortOrder: "asc" },
   });
 

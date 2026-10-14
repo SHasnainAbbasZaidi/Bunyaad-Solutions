@@ -1,5 +1,5 @@
 "use client";
-import {useSiteSettings,sectionCopy} from "./SiteContext";
+import { useSiteSettings, sectionCopy } from "./SiteContext";
 import { Sparkles } from "lucide-react";
 
 interface Member {
@@ -15,6 +15,53 @@ interface Member {
   skills?: string | null;
   linkedin?: string | null;
   isFounder: boolean;
+  isLeadership?: boolean;
+}
+
+function MemberExtras({ member }: { member: Member }) {
+  let skills: string[] = [];
+  try {
+    const parsed = JSON.parse(member.skills || "[]");
+    if (Array.isArray(parsed))
+      skills = parsed.filter((v) => typeof v === "string");
+  } catch {}
+  return (
+    <div className="mt-4 space-y-3">
+      <p className="text-xs text-zinc-500">
+        {member.department}
+        {member.isLeadership ? " · Leadership" : ""}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {skills.map((skill) => (
+          <span
+            key={skill}
+            className="text-xs rounded-md border border-blue-500/20 px-2 py-1"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+      <div className="flex gap-4 text-sm text-blue-600 dark:text-blue-400">
+        {[
+          ["LinkedIn", member.linkedin],
+          ["Website", member.website],
+          ["X / Twitter", member.twitter],
+          ["GitHub", member.github],
+        ]
+          .filter(([, url]) => url)
+          .map(([label, url]) => (
+            <a
+              key={label}
+              href={url!}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {label}
+            </a>
+          ))}
+      </div>
+    </div>
+  );
 }
 
 function LinkedInIcon({ className }: { className?: string }) {
@@ -26,7 +73,7 @@ function LinkedInIcon({ className }: { className?: string }) {
 }
 
 export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
-  const settings=useSiteSettings();
+  const settings = useSiteSettings();
   const founders = teamMembers.filter((m) => m.isFounder);
   const coreTeam = teamMembers.filter((m) => !m.isFounder);
 
@@ -39,16 +86,22 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
             Leadership & Visionaries
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
-            {sectionCopy(settings,"team_title","Meet the Founders & Team")}
+            {sectionCopy(settings, "team_title", "Meet the Founders & Team")}
           </h2>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400">
-            {sectionCopy(settings,"team_description","The people building our digital platforms. Verified profiles will be shared here.")}
+            {sectionCopy(
+              settings,
+              "team_description",
+              "The people building our digital platforms. Verified profiles will be shared here.",
+            )}
           </p>
         </div>
 
-        {!teamMembers.length&&<p className="text-center">Team profiles will be available soon.</p>}
+        {!teamMembers.length && (
+          <p className="text-center">Team profiles will be available soon.</p>
+        )}
         {/* Founding Partners Featured Cards */}
-        <div className={founders.length?"mb-14":"hidden"}>
+        <div className={founders.length ? "mb-14" : "hidden"}>
           <div className="text-center mb-8">
             <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-3 py-1 rounded-md border border-blue-200/50 dark:border-blue-800/50">
               Founding Partners
@@ -59,7 +112,12 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
             {founders.map((founder) => {
               let skillsList: string[] = [];
               try {
-                if (founder.skills) {const parsed=JSON.parse(founder.skills);skillsList=Array.isArray(parsed)?parsed.filter(s=>typeof s==="string"):[];}
+                if (founder.skills) {
+                  const parsed = JSON.parse(founder.skills);
+                  skillsList = Array.isArray(parsed)
+                    ? parsed.filter((s) => typeof s === "string")
+                    : [];
+                }
               } catch {
                 skillsList = [];
               }
@@ -88,7 +146,14 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
                     )}
                   </div>
 
-                  {founder.photo&&<img src={founder.photo} alt={founder.name} loading="lazy" className="h-28 w-28 object-cover rounded-2xl mb-5"/>}
+                  {founder.photo && (
+                    <img
+                      src={founder.photo}
+                      alt={founder.name}
+                      loading="lazy"
+                      className="h-28 w-28 object-cover rounded-2xl mb-5"
+                    />
+                  )}
                   <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">
                     {founder.name}
                   </h3>
@@ -99,6 +164,9 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
                   <p className="text-sm text-zinc-600 dark:text-zinc-300 mt-4 leading-relaxed">
                     {founder.biography}
                   </p>
+                  <MemberExtras
+                    member={{ ...founder, skills: null, linkedin: null }}
+                  />
 
                   {skillsList.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
@@ -133,16 +201,24 @@ export function TeamSection({ teamMembers }: { teamMembers: Member[] }) {
                   key={member.id}
                   className="p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all"
                 >
-                  {member.photo&&<img src={member.photo} alt={member.name} loading="lazy" className="h-24 w-24 object-cover rounded-xl mb-4"/>}
+                  {member.photo && (
+                    <img
+                      src={member.photo}
+                      alt={member.name}
+                      loading="lazy"
+                      className="h-24 w-24 object-cover rounded-xl mb-4"
+                    />
+                  )}
                   <h4 className="text-lg font-bold text-zinc-900 dark:text-white">
                     {member.name}
                   </h4>
                   <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
                     {member.designation}
                   </p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2.5 line-clamp-3">
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2.5">
                     {member.biography}
                   </p>
+                  <MemberExtras member={member} />
                 </div>
               ))}
             </div>

@@ -6,7 +6,11 @@ import { Moon, Sun } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const mounted = React.useSyncExternalStore(() => () => {}, () => true, () => false);
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   if (!mounted) {
     return (

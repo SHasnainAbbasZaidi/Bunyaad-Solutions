@@ -3,8 +3,11 @@ import { Header } from "@/components/public/Header";
 import { TeamSection } from "@/components/public/TeamSection";
 import { Footer } from "@/components/public/Footer";
 
-
-export const metadata={"title":"Our team","description":"Meet the people behind Bunyaad Solutions.","alternates":{"canonical":"/team"}};
+export const metadata = {
+  title: "Our team",
+  description: "Meet the people behind Bunyaad Solutions.",
+  alternates: { canonical: "/team" },
+};
 
 export default async function TeamPage() {
   const teamMembers = await prisma.teamMember.findMany({

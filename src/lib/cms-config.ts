@@ -1,20 +1,274 @@
-export type Field = { key: string; label: string; type: "text" | "textarea" | "rich" | "image" | "url" | "email" | "password" | "number" | "boolean" | "select" | "list" | "date"; required?: boolean; options?: string[] };
-const f = (key: string, label: string, type: Field["type"] = "text", required = false, options?: string[]): Field => ({ key, label, type, required, options });
-export const projectStatuses = ["CONCEPT", "PLANNING", "IN_DEVELOPMENT", "TESTING", "COMING_SOON", "LIVE", "ON_HOLD", "ARCHIVED"];
-export const categories = ["Company Announcements", "Product Updates", "Platform Launches", "Technology Insights", "Business News", "Development Updates", "Events"];
-export const inquiryCategories = ["General Inquiry", "Business Partnership", "Platform Development", "Enterprise Solutions", "Technical Collaboration", "Other"];
-export const settingKeys = ["site_name", "site_tagline", "contact_email", "contact_phone", "contact_address", "linkedin_url", "twitter_url", "footer_content", "seo_title", "seo_description", "theme_default", "navigation", "homepage_sections", "section_copy"];
-export const modules: Record<string, { label: string; model: string; fields: Field[]; superOnly?: boolean; drafts?: boolean }> = {
-  hero: { label: "Hero", model: "heroSection", drafts: true, fields: [f("headline","Headline","text",true),f("subtitle","Subtitle"),f("description","Description","textarea",true),f("ctaPrimaryText","Primary button","text",true),f("ctaPrimaryUrl","Primary link","url",true),f("ctaSecondaryText","Secondary button"),f("ctaSecondaryUrl","Secondary link","url"),f("backgroundImage","Hero image","image"),f("visualSettings","Alignment","select",true,["center","left"]),f("published","Published","boolean")] },
-  about: { label: "About & approach", model: "aboutSection", drafts: true, fields: [f("sectionKey","Section key (overview, mission, vision, story, values, expertise, philosophy, objectives, approach)","text",true),f("title","Title","text",true),f("content","Content","rich",true),f("image","Image","image"),f("sortOrder","Display order","number"),f("visible","Visible","boolean")] },
-  services: { label: "Services", model: "service", drafts: true, fields: [f("title","Title","text",true),f("slug","Slug (generated when empty)"),f("icon","Icon","select",false,["Layers","Building2","Users","ShoppingBag","Home","CalendarCheck","Code","Cpu"]),f("image","Image","image"),f("shortDescription","Summary","textarea",true),f("fullContent","Detailed description","rich",true),f("targetAudience","Target audience"),f("capabilities","Features","list"),f("relatedProjectIds","Related project IDs","list"),f("sortOrder","Display order","number"),f("published","Published","boolean")] },
-  projects: { label: "Projects", model: "project", drafts: true, fields: [f("name","Name","text",true),f("slug","Slug (generated when empty)"),f("logo","Logo","image"),f("coverImage","Cover image","image"),f("description","Summary","textarea",true),f("fullContent","Detailed description","rich"),f("industry","Category"),f("businessModel","Business model","select",true,["B2B","B2C","D2C","HYBRID"]),f("status","Development status","select",true,projectStatuses),f("externalUrl","Project website","url"),f("launchDate","Launch date","date"),f("technologies","Technologies","list"),f("gallery","Gallery images (one media URL per line)","list"),f("featured","Featured","boolean"),f("sortOrder","Display order","number"),f("published","Published","boolean")] },
-  team: { label: "Team", model: "teamMember", drafts: true, fields: [f("name","Full name","text",true),f("designation","Designation","text",true),f("department","Department"),f("photo","Photo","image"),f("biography","Biography","textarea"),f("skills","Professional skills","list"),f("linkedin","LinkedIn","url"),f("twitter","X / Twitter","url"),f("github","GitHub","url"),f("website","Website","url"),f("isFounder","Founder","boolean"),f("isLeadership","Leadership","boolean"),f("sortOrder","Display order","number"),f("active","Visible","boolean")] },
-  news: { label: "News & insights", model: "article", drafts: true, fields: [f("title","Title","text",true),f("slug","Slug (generated when empty)"),f("coverImage","Featured image","image"),f("excerpt","Summary","textarea"),f("content","Article","rich",true),f("authorId","Author administrator ID"),f("category","Category","select",true,categories),f("tags","Tags","list"),f("status","Publication","select",true,["DRAFT","PUBLISHED","SCHEDULED","ARCHIVED"]),f("publishedAt","Publication date","date"),f("scheduledAt","Scheduled publication (your local time)","date"),f("featured","Featured","boolean"),f("seoTitle","SEO title"),f("seoDescription","SEO description","textarea")] },
-  inquiries: { label: "Inquiries", model: "contactInquiry", fields: [f("status","Status","select",true,["NEW","IN_PROGRESS","REPLIED","CLOSED"]),f("assignedToId","Assigned administrator ID"),f("internalNotes","Internal notes","textarea"),f("archived","Archived","boolean")] },
-  settings: { label: "Website settings", model: "siteSettings", superOnly: true, fields: [f("key","Setting","select",true,settingKeys),f("value","Value","textarea"),f("group","Group","select",true,["general","contact","social","seo","navigation","footer"])] },
-  users: { label: "Administrators", model: "user", superOnly: true, fields: [f("name","Full name","text",true),f("email","Email","email",true),f("role","Role","select",true,["EDITOR","SUPER_ADMIN"]),f("active","Account enabled","boolean")] },
+export type Field = {
+  key: string;
+  label: string;
+  type:
+    | "text"
+    | "textarea"
+    | "rich"
+    | "image"
+    | "url"
+    | "email"
+    | "password"
+    | "number"
+    | "boolean"
+    | "select"
+    | "list"
+    | "date";
+  required?: boolean;
+  options?: string[];
+};
+const f = (
+  key: string,
+  label: string,
+  type: Field["type"] = "text",
+  required = false,
+  options?: string[],
+): Field => ({ key, label, type, required, options });
+export const projectStatuses = [
+  "CONCEPT",
+  "PLANNING",
+  "IN_DEVELOPMENT",
+  "TESTING",
+  "COMING_SOON",
+  "LIVE",
+  "ON_HOLD",
+  "ARCHIVED",
+];
+export const categories = [
+  "Company Announcements",
+  "Product Updates",
+  "Platform Launches",
+  "Technology Insights",
+  "Business News",
+  "Development Updates",
+  "Events",
+];
+export const inquiryCategories = [
+  "General Inquiry",
+  "Business Partnership",
+  "Platform Development",
+  "Enterprise Solutions",
+  "Technical Collaboration",
+  "Other",
+];
+export const settingKeys = [
+  "site_name",
+  "site_tagline",
+  "contact_email",
+  "contact_phone",
+  "contact_address",
+  "linkedin_url",
+  "twitter_url",
+  "footer_content",
+  "seo_title",
+  "seo_description",
+  "theme_default",
+  "navigation",
+  "homepage_sections",
+  "section_copy",
+];
+export const modules: Record<
+  string,
+  {
+    label: string;
+    model: string;
+    fields: Field[];
+    superOnly?: boolean;
+    drafts?: boolean;
+  }
+> = {
+  hero: {
+    label: "Hero",
+    model: "heroSection",
+    drafts: true,
+    fields: [
+      f("headline", "Headline", "text", true),
+      f("subtitle", "Subtitle"),
+      f("description", "Description", "textarea", true),
+      f("ctaPrimaryText", "Primary button", "text", true),
+      f("ctaPrimaryUrl", "Primary link", "url", true),
+      f("ctaSecondaryText", "Secondary button"),
+      f("ctaSecondaryUrl", "Secondary link", "url"),
+      f("backgroundImage", "Hero image", "image"),
+      f("visualSettings", "Alignment", "select", true, ["center", "left"]),
+      f("published", "Published", "boolean"),
+    ],
+  },
+  about: {
+    label: "About & approach",
+    model: "aboutSection",
+    drafts: true,
+    fields: [
+      f(
+        "sectionKey",
+        "Section key (overview, mission, vision, story, values, expertise, philosophy, objectives, approach)",
+        "text",
+        true,
+      ),
+      f("title", "Title", "text", true),
+      f("content", "Content", "rich", true),
+      f("image", "Image", "image"),
+      f("sortOrder", "Display order", "number"),
+      f("visible", "Visible", "boolean"),
+    ],
+  },
+  services: {
+    label: "Services",
+    model: "service",
+    drafts: true,
+    fields: [
+      f("title", "Title", "text", true),
+      f("slug", "Slug (generated when empty)"),
+      f("icon", "Icon", "select", false, [
+        "Layers",
+        "Building2",
+        "Users",
+        "ShoppingBag",
+        "Home",
+        "CalendarCheck",
+        "Code",
+        "Cpu",
+      ]),
+      f("image", "Image", "image"),
+      f("shortDescription", "Summary", "textarea", true),
+      f("fullContent", "Detailed description", "rich", true),
+      f("targetAudience", "Target audience"),
+      f("capabilities", "Features", "list"),
+      f("relatedProjectIds", "Related project IDs", "list"),
+      f("sortOrder", "Display order", "number"),
+      f("published", "Published", "boolean"),
+    ],
+  },
+  projects: {
+    label: "Projects",
+    model: "project",
+    drafts: true,
+    fields: [
+      f("name", "Name", "text", true),
+      f("slug", "Slug (generated when empty)"),
+      f("logo", "Logo", "image"),
+      f("coverImage", "Cover image", "image"),
+      f("description", "Summary", "textarea", true),
+      f("fullContent", "Detailed description", "rich"),
+      f("industry", "Category"),
+      f("businessModel", "Business model", "select", true, [
+        "B2B",
+        "B2C",
+        "D2C",
+        "HYBRID",
+      ]),
+      f("status", "Development status", "select", true, projectStatuses),
+      f("externalUrl", "Project website", "url"),
+      f("launchDate", "Launch date", "date"),
+      f("technologies", "Technologies", "list"),
+      f("gallery", "Gallery images (one media URL per line)", "list"),
+      f("featured", "Featured", "boolean"),
+      f("sortOrder", "Display order", "number"),
+      f("published", "Published", "boolean"),
+    ],
+  },
+  team: {
+    label: "Team",
+    model: "teamMember",
+    drafts: true,
+    fields: [
+      f("name", "Full name", "text", true),
+      f("designation", "Designation", "text", true),
+      f("department", "Department"),
+      f("photo", "Photo", "image"),
+      f("biography", "Biography", "textarea"),
+      f("skills", "Professional skills", "list"),
+      f("linkedin", "LinkedIn", "url"),
+      f("twitter", "X / Twitter", "url"),
+      f("github", "GitHub", "url"),
+      f("website", "Website", "url"),
+      f("isFounder", "Founder", "boolean"),
+      f("isLeadership", "Leadership", "boolean"),
+      f("sortOrder", "Display order", "number"),
+      f("active", "Visible", "boolean"),
+    ],
+  },
+  news: {
+    label: "News & insights",
+    model: "article",
+    drafts: true,
+    fields: [
+      f("title", "Title", "text", true),
+      f("slug", "Slug (generated when empty)"),
+      f("coverImage", "Featured image", "image"),
+      f("excerpt", "Summary", "textarea"),
+      f("content", "Article", "rich", true),
+      f("authorId", "Author administrator ID"),
+      f("category", "Category", "select", true, categories),
+      f("tags", "Tags", "list"),
+      f("status", "Publication", "select", true, [
+        "DRAFT",
+        "PUBLISHED",
+        "SCHEDULED",
+        "ARCHIVED",
+      ]),
+      f("publishedAt", "Publication date", "date"),
+      f("scheduledAt", "Scheduled publication (your local time)", "date"),
+      f("featured", "Featured", "boolean"),
+      f("seoTitle", "SEO title"),
+      f("seoDescription", "SEO description", "textarea"),
+    ],
+  },
+  inquiries: {
+    label: "Inquiries",
+    model: "contactInquiry",
+    fields: [
+      f("status", "Status", "select", true, [
+        "NEW",
+        "IN_PROGRESS",
+        "REPLIED",
+        "CLOSED",
+      ]),
+      f("assignedToId", "Assigned administrator ID"),
+      f("internalNotes", "Internal notes", "textarea"),
+      f("archived", "Archived", "boolean"),
+    ],
+  },
+  settings: {
+    label: "Website settings",
+    model: "siteSettings",
+    superOnly: true,
+    fields: [
+      f("key", "Setting", "select", true, settingKeys),
+      f("value", "Value", "textarea"),
+      f("group", "Group", "select", true, [
+        "general",
+        "contact",
+        "social",
+        "seo",
+        "navigation",
+        "footer",
+      ]),
+    ],
+  },
+  users: {
+    label: "Administrators",
+    model: "user",
+    superOnly: true,
+    fields: [
+      f("name", "Full name", "text", true),
+      f("email", "Email", "email", true),
+      f("role", "Role", "select", true, ["EDITOR", "SUPER_ADMIN"]),
+      f("active", "Account enabled", "boolean"),
+    ],
+  },
 };
 export function initialValues(resource: string): Record<string, unknown> {
-  return Object.fromEntries(modules[resource].fields.map(field => [field.key, field.type === "boolean" ? false : field.type === "number" ? 0 : field.type === "select" ? field.options?.[0] || "" : ""]));
+  return Object.fromEntries(
+    modules[resource].fields.map((field) => [
+      field.key,
+      field.type === "boolean"
+        ? false
+        : field.type === "number"
+          ? 0
+          : field.type === "select"
+            ? field.options?.[0] || ""
+            : "",
+    ]),
+  );
 }
