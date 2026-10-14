@@ -92,4 +92,10 @@ Development branch: `completion/cms-audit`.
 - `7b0edda` — Complete database-backed CMS and public content workflows.
 - Follow-up commit titled `Verify CMS security and document deployment handover` contains the final checks, refinements, formatting, and this report. Use `git log -2 --oneline` for its generated hash.
 
-The pre-change backup remains in ignored `.local-backups/baseline-20261014/`. Local environments, databases, media, and test credentials are not committed. Nothing has been pushed or deployed.
+The pre-change backup remains in ignored `.local-backups/baseline-20261014/`. Local environments, databases, media, and test credentials are not committed. No production deployment was performed.
+
+**Owner-requested follow-up:**
+
+Removed the desktop and mobile Admin Portal links; direct `/admin` access remains available. React debugging now permits `unsafe-eval` only in development, verified against the production and test policies. Reactivated the preserved local administrator with a unique private password after taking a fresh database backup; credentials are not included in source or Git history. New installations must still create their own administrator. Targeted lint checks passed.
+
+The application was pushed to `main` in `SHasnainAbbasZaidi/Bunyaad-Solutions` using the existing HTTPS Git credential manager after SSH authentication was unavailable. Existing remote LICENSE and .gitattributes were preserved through a merge, without force-pushing. Commits `5ec15fb` and `c03b0ed` contain the navigation/CSP change and repository-history merge, respectively. Publishing source to GitHub does not deploy or provision the local database on a hosting service.

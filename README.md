@@ -41,7 +41,7 @@ Open [the website](http://localhost:3000/) or [the admin portal](http://localhos
 
 ## Secure administrator setup
 
-There are no built-in credentials. The previous exposed seed-password account was disabled during the audit.
+There are no built-in credentials. The previous exposed seed-password account was disabled during the audit and later reactivated locally at the owner's request with a unique temporary password. Those credentials and the database are excluded from Git; fresh installations still require administrator setup below. Public navigation has no admin link; visit `/admin` directly.
 
 For a new Super Admin, set `ADMIN_EMAIL`, `ADMIN_NAME`, and a unique `ADMIN_PASSWORD` in your private environment. The password must contain at least 12 characters and at most 72 UTF-8 bytes.
 
