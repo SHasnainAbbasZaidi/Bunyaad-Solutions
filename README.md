@@ -111,3 +111,5 @@ Some restricted Windows execution environments block Node's user-information API
 ## Production deployment
 
 No live deployment has been performed. See [deployment guidance](docs/DEPLOYMENT.md), [feature audit](docs/FEATURE-AUDIT.md), and [implementation report](docs/IMPLEMENTATION-REPORT.md).
+
+For an existing Ubuntu `bunyaad.service`, [automatic updates](docs/AUTOMATIC-UPDATES.md) can check GitHub at 7 AM and 7 PM Pakistan time, test releases before activation, and roll back failed health checks.
